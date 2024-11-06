@@ -2,6 +2,7 @@ package com.example.TesseractOCR.service;
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,12 +14,15 @@ public class ImageTextExtractorService {
 
     private final Tesseract tesseract;
 
+    @Value("${tesseract.data.path}")
+    String tesseactDataPath;
+
     public ImageTextExtractorService() {
         tesseract = new Tesseract();
-        tesseract.setDatapath("C:\\Program Files\\Tesseract-OCR\\tessdata");  // Path to Tesseract data directory
     }
 
     public String imageExtractor(MultipartFile file) {
+        tesseract.setDatapath(tesseactDataPath);  // Path to Tesseract data directory
         // Get the file's original extension (e.g., .jpg, .jpeg, .png)
         String originalFileExtension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         try {
